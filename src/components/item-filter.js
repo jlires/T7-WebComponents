@@ -109,9 +109,9 @@ class ItemFilter extends HTMLElement {
 
   showGames(games, filter) {
     const cardsRowElement = this.shadowRoot.querySelector(".row-cards");
-    WocardsRowElement.innerHTML = "";
+    cardsRowElement.innerHTML = "";
     let cardElementsHTML = "";
-    console.log(filter.contains)
+
     if (filter.contains) {
     	games = games.filter(game => game.title.includes(filter.contains));
     }
@@ -123,8 +123,6 @@ class ItemFilter extends HTMLElement {
     });
 
     cardsRowElement.innerHTML = cardElementsHTML;
-    console.log(cardsRowElement);
-
   }
 
 
