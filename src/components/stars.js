@@ -3,7 +3,7 @@ class RatingStarsClass extends HTMLElement {
 		super();
 		this.attachShadow({mode:'open'});
 		this.shadowRoot.innerHTML = this.template;
-		this.rated = false;
+		this.rated = this.getAttribute('rated') === "true" ? true : false;
 		
 		this.stars = this.shadowRoot.querySelector('#rating');
 		this.initialize();
@@ -35,7 +35,7 @@ class RatingStarsClass extends HTMLElement {
 	
 	initialize() {
 		if (this.getAttribute('stars')) {
-			let stars = parseInt(this.getAttribute('stars'));
+			let stars = Math.round(parseInt(this.getAttribute('stars')));
 			console.log('---', stars);
 			let action = 'add';
 			let i = 0;
