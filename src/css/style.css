@@ -271,6 +271,11 @@ input[type=text]:placeholder {
   background-size: cover;
 }
 
+#content-block {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
 #signWithGoogleButton {
   width: 80%;
   margin: auto;
