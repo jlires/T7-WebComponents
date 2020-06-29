@@ -4,13 +4,20 @@ class RatingStarsClass extends HTMLElement {
       this.attachShadow({mode:'open'});
       this.shadowRoot.innerHTML = this.template;
       
-      this.stars = this.shadowRoot.querySelector('#rating');
-      this.stars.addEventListener('click', function (e) {
+        this.stars = this.shadowRoot.querySelector('#rating');
+        this.stars.addEventListener('click', function (e) {
             let action = 'add';
+            let i = 0;
+            let value = 1;
             for (const span of this.children) {
                 span.classList[action]('active');
-                if (span === e.target) action = 'remove';
+                i += value;
+                if (span === e.target) {
+                    action = 'remove';
+                    value = 0;
+                }
             }
+            console.log(i);
         });
     }
     
