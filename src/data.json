@@ -1,0 +1,65 @@
+
+{
+    "games":[
+        {
+        "title": "Ajedrez",
+        "description": "El ajedrez es un deporte y también un juego de mesa. Este juego de inteligencia consiste en derrocar al rey oponente. Se cree que su origen se remonta al siglo XV, en Europa, como una evolución del juego persa Shatranj.",
+        "image": "https://www.sololistas.net/wp-content/uploads/2011/05/Ajedrez-150x150.jpg",
+        "rating": 0
+        },
+        {
+        "title": "Naipes",
+        "description": "Los naipes son tarjetas de cartón o material plástico que forman una baraja. Existe una gran variedad de juegos de cartas, entre los que destacan el póquer, tute, mus, brisca, canasta, etc.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/Naipes-o-cartas-150x150.jpg",
+        "rating": 0
+        },
+        {
+        "title": "Monopoly",
+        "description": "El monopoly es un conocido juego de mesa de bienes raíces. El objetivo del juego es crear un monopolio, poseyendo todas las propiedades disponibles en el juego. Si bien el juego se creó en los Estados Unidos, actualmente cuenta con ediciones locales para diversos países." ,
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/Monopoly1-150x150.jpg",
+        "rating": 0
+        },
+        {"title":"Dominó",
+        "description":"El dominó es un juego de mesa en el que se utilizan fichas rectangulares divididas en dos cuadrados. En cada cuadrado encontramos marcados de cero a seis puntos. El dominó surgió de los juegos de dados, sin embargo, la forma actual se remonta al siglo XVIII.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/Domin%C3%B3-150x150.jpg",
+        "rating": 0
+        },
+        {
+        "title":"Rompecabezas",
+        "description":"El rompecabezas, o puzzle, es un juego que consiste en armar figuras combinando correctamente sus partes. Los rompecabezas surgieron alrededor del año 1900 y rápidamente se convirtieron en uno de los pasatiempos favoritos de la alta sociedad.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/Rompecabezas-150x150.jpg",
+        "rating": 0
+        },
+        {
+        "title":"Backgammon",
+        "description":"El backgammon es el juego de mesa más antiguo. Se cree que el juego se inventó en el Antiguo Egipto, Sumeria o Mesopotamia bajo el Imperio Persa.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/backgammon-150x150.jpg",
+        "rating": 0
+        },
+        {
+        "title":"Damas",
+        "description":"Este juego consiste en mover una serie de piezas a lo largo de un tablero de ajedrez con la intención de capturar o comerse las piezas del contrario. No se sabe con exactitud cuándo se inventó este juego, pero hay evidencia de juegos similares en el Antiguo Egipto.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/Damas-150x150.jpeg",
+        "rating": 0
+        },
+        {
+        "title":"Damas chinas",
+        "description":"Las damas chinas es un juego de mesa en el que pueden participar entre 2 a 6 jugadores. Pese a su nombre, se cree que el juego se originó en Alemania. El nombre de “damas chinas” se le dio en Estados Unidos para volverlo más exótico.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/damas-chinas-150x150.jpg",
+        "rating": 0
+        },
+        {
+        "title":"Jenga",
+        "description":"El jenga es un juego de mesa en el que los participantes ponen a prueba su habilidad física y mental. Se deben retirar ciertos bloques de una torre y luego colocarlos en su parte superior, sino derribar la torre.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/jenga-150x150.jpg",
+        "rating": 0
+        },
+        {
+        "title":"Twister",
+        "description":"Twister es uno de los juegos más exitosos de Hasbro. Los jugadores deberán colocar sus manos y pies en el color que les corresponda. Cuando un jugador cae es eliminado del juego.",
+        "image":"https://www.sololistas.net/wp-content/uploads/2011/05/Twister-150x150.jpg",
+        "rating": 0
+        }
+    ],
+    "fuente": "https://www.sololistas.net/los-10-mejores-juegos-de-mesa.html"
+}
