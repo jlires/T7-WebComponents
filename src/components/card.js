@@ -9,6 +9,7 @@ class CardGame extends HTMLElement {
         this._description = "";
         this._image = "";
         this._rating = 0;
+        this._rated = false;
         
     }
     
@@ -18,6 +19,7 @@ class CardGame extends HTMLElement {
       this.description = this.getAttribute('description') || this.description;
       this.image = this.getAttribute('image') || this.image;
       this.rating = this.getAttribute('rating') || this.rating;
+      this.rated = this.getAttribute('rated') || this.rated;
       // Check if shadowRoot exists first
       if (!this.shadowRoot) {
         this.attachShadow({mode: 'open'});
@@ -27,6 +29,7 @@ class CardGame extends HTMLElement {
       this.shadowRoot.querySelector('[name="title"]').innerHTML = this.title;
       this.shadowRoot.querySelector('#gameimg').src = this.image;
       this.shadowRoot.querySelector('[name="description"]').innerHTML = this.description;
+      this.shadowRoot.querySelector('.rating-stars').innerHTML = `<star-rating stars=${this.rating} rated="${this.rated}"></star_rating>`;
     }
 
     attributeChangedCallback (name, oldValue, newValue) {
@@ -73,6 +76,14 @@ class CardGame extends HTMLElement {
         this._rating = val;
     }
 
+    get rated() {
+        return this._rated;
+    }
+
+    set rated(val) {
+        this._rated = val;
+    }
+
     get template() {
 
         return `
@@ -86,6 +97,9 @@ class CardGame extends HTMLElement {
                        <div class="back">
                            <p id="description"><slot name="description"></slot></p>
                        </div>
+                   </div>
+                   <div class="rating-stars">
+
                    </div>
                </content>
            </div>
