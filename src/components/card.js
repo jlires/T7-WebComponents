@@ -1,7 +1,3 @@
-/* <card-game title="buen titulo" description="Compralo altoque mi rey" 
-image="https://cdn02.nintendo-europe.com/media/images/10_share_images/games_15/virtual_console_nintendo_3ds_7/SI_3DSVC_SuperMarioBros.jpg" >
-</card-game>
- */
 class CardGame extends HTMLElement {
     constructor() {
         super();
@@ -91,7 +87,9 @@ class CardGame extends HTMLElement {
                <content>
                    <div class="card">
                        <div class="front">
+                       			<div class="img-container">
                            <img id="gameimg" src="https://picsum.photos/500/300/?image=10"></img>
+                           </div>
                            <h3 id="title"><slot name="title"></slot></h3>
                        </div>
                        <div class="back">
@@ -104,6 +102,13 @@ class CardGame extends HTMLElement {
                </content>
            </div>
            <style>
+           
+           			.cardBox {
+                	margin-bottom: 40px;
+                  margin-left: 40px;
+                  height: 300px;
+                  display: inline-block;
+                }
            
            			.card {
                   /* Add shadows to create the "card" effect */
@@ -118,11 +123,16 @@ class CardGame extends HTMLElement {
                .cardBox:hover .card {
                    transform: rotateY( 180deg);
                }
+               
+               .rating-stars {
+               	width: 100%;
+                height: 50px;
+               }
        
                .card {
                    background: white;
                    cursor: default;
-                   height: 450px;
+                   height: 250px;
                    transform-style: preserve-3d;
                    transition: transform 0.4s ease 0s;
                    width: 100%;
@@ -131,8 +141,12 @@ class CardGame extends HTMLElement {
                }
                img {
                    width: 100%;
-                   height 150px;
-                   object-fit: containt;
+               }
+               
+               .img-container {
+               			width: 100%;
+                   height: 170px;
+                   overflow: hidden;
                }
        
                .card p {
@@ -195,8 +209,6 @@ class CardGame extends HTMLElement {
                        margin-left: 2.8%;
                        margin-top: 3%;
                        width: 46%;
-                   }
-                   .card {
                        height: 285px;
                    }
                    .cardBox:last-child {
@@ -207,8 +219,6 @@ class CardGame extends HTMLElement {
                @media screen and (max-width: 480px) {
                    .cardBox {
                        width: 94.5%;
-                   }
-                   .card {
                        height: 260px;
                    }
                }

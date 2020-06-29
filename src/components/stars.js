@@ -36,18 +36,15 @@ class RatingStarsClass extends HTMLElement {
 	initialize() {
 		if (this.getAttribute('stars')) {
 			let stars = Math.round(parseInt(this.getAttribute('stars')));
-			console.log('---', stars);
 			let action = 'add';
 			let i = 0;
 			for (const span of this.stars.children) {
-				span.classList[action]('active');
-				i += 1;
 				if (i === stars) {
 					action = 'remove';
 				}
-				console.log(action);
+        span.classList[action]('active');
+        i += 1;
 			} 
-			console.log(action);
 		}
 	}
 	
