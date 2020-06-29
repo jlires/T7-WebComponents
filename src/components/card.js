@@ -1,56 +1,105 @@
-const info = [{title: "juego 1", img: "https://picsum.photos/500/300/?image=5",  description: "buenardo"},
-                  {title: "juego 2", img: "https://picsum.photos/500/300/?image=14", description: "juego del añi"},
-                  {title: "juego 3", img: "https://picsum.photos/500/300/?image=11", description: "Wenisimo hermanits"},
-                  {title: "juego 4", img: "https://picsum.photos/500/300/?image=27", description: "la pulenta"},
-                  {title: "juego 5", img: "https://picsum.photos/500/300/?image=13", description: "boi"},
-                  {title: "juego 6", img: "https://picsum.photos/500/300/?image=9",  description: "de panini"}]
-
-
+/* <card-game title="buen titulo" description="Compralo altoque mi rey" 
+image="https://cdn02.nintendo-europe.com/media/images/10_share_images/games_15/virtual_console_nintendo_3ds_7/SI_3DSVC_SuperMarioBros.jpg" >
+</card-game>
+ */
 class CardGame extends HTMLElement {
     constructor() {
         super();
-        this.importDocument = document.currentScript.ownerDocument;
+        this._title = "";
+        this._description = "";
+        this._image = "";
+        this._rating = 0;
+        
     }
+    
     connectedCallback() {
-        let shadowRoot = this.attachShadow({ mode: 'open' });
-        var t = this.importDocument.querySelector('#Gamecard');
-        info.forEach(game => {
-            let instance = t.content.cloneNode(true);
-            // aquí cambio la info de la tarjeta
-            instance.querySelector('#title').innerHTML = game.title;
-            instance.querySelector('#gameimg').src = game.img;
-            instance.querySelector('#description').innerHTML = game.description;
-            shadowRoot.appendChild(instance);
-        });
+      // Initialize properties that depend on light DOM
+      this.title = this.getAttribute('title') || this.title;
+      this.description = this.getAttribute('description') || this.description;
+      this.image = this.getAttribute('image') || this.image;
+      this.rating = this.getAttribute('rating') || this.rating;
+      // Check if shadowRoot exists first
+      if (!this.shadowRoot) {
+        this.attachShadow({mode: 'open'});
+        this.shadowRoot.innerHTML = this.template;
+      }
+      // Set the shadow img attributes.
+      this.shadowRoot.querySelector('[name="title"]').innerHTML = this.title;
+      this.shadowRoot.querySelector('#gameimg').src = this.image;
+      this.shadowRoot.querySelector('[name="description"]').innerHTML = this.description;
     }
 
-    get template(){
+    attributeChangedCallback (name, oldValue, newValue) {
+        if (this.shadowRoot) {
+            this.shadowRoot.querySelector(`[name="${name}"]`).innerHTML = this[name];
+           }
+    }
+
+    static get observedAttributes () {
+       return ['title', 'description'];
+    }
+
+    get title () {
+    		console.log('get title()')
+        return this._title;
+     }
+    set title (val) {
+       console.log(`set title(${val})`);
+       this._title = val;
+    }
+
+    get description () {
+       console.log('get description()');
+       return this._description;
+    }
+    set description (val) {
+       console.log(`set description(${val})`);
+        this._description = val;
+    }
+    
+    get image () {
+       return this._image;
+    }
+    set image (val) {
+    	this._image = val;
+    }
+    
+    get rating () {
+       console.log('get rating()');
+       return this._rating;
+    }
+    set rating (val) {
+       console.log(`set rating(${val})`);
+        this._rating = val;
+    }
+
+    get template() {
 
         return `
         <div class="cardBox">
                <content>
                    <div class="card">
                        <div class="front">
-                           <h3 id="title">Nombre Del Juego</h3>
                            <img id="gameimg" src="https://picsum.photos/500/300/?image=10"></img>
+                           <h3 id="title"><slot name="title"></slot></h3>
                        </div>
                        <div class="back">
-                           <h3>Descripción</h3>
-                           <p id="description"></p>
+                           <p id="description"><slot name="description"></slot></p>
                        </div>
                    </div>
                </content>
            </div>
            <style>
-               
-               .cardBox {
-                   float: left;
-                   font-size: 1.2em;
-                   margin: 1% 0 0 1%;
-                   perspective: 800px;
-                   transition: all 0.3s ease 0s;
-                   width: 23.7%;
-               }
+           
+           			.card {
+                  /* Add shadows to create the "card" effect */
+                  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                  transition: 0.3s;
+                }
+
+                /* On mouse-over, add a deeper shadow */
+
+                /* Add some padding inside the card container */
        
                .cardBox:hover .card {
                    transform: rotateY( 180deg);
@@ -60,8 +109,6 @@ class CardGame extends HTMLElement {
                    background: white;
                    cursor: default;
                    height: 450px;
-                   border: black solid 2px;
-                   border-radius: 50px;
                    transform-style: preserve-3d;
                    transition: transform 0.4s ease 0s;
                    width: 100%;
@@ -69,8 +116,9 @@ class CardGame extends HTMLElement {
                    animation: giro 1s 1;
                }
                img {
-                   max-height: 60%;
-                   max-width: 100%;
+                   width: 100%;
+                   height 150px;
+                   object-fit: containt;
                }
        
                .card p {
@@ -86,7 +134,6 @@ class CardGame extends HTMLElement {
                    display: block;
                    font-size: 1.2em;
                    height: 100%;
-                   padding: 0.8em;
                    position: absolute;
                    text-align: center;
                    width: 100%;
@@ -153,7 +200,7 @@ class CardGame extends HTMLElement {
                }
            </style>
         `;
-       }
+    }
 }
 
 
