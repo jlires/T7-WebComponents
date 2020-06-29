@@ -4,7 +4,7 @@ class RatingStarsClass extends HTMLElement {
 		this.attachShadow({mode:'open'});
 		this.shadowRoot.innerHTML = this.template;
 		this.rated = this.getAttribute('rated') === "true" ? true : false;
-		
+
 		this.stars = this.shadowRoot.querySelector('#rating');
 		this.initialize();
 		this.stars.addEventListener('click', function (e) {
@@ -22,17 +22,17 @@ class RatingStarsClass extends HTMLElement {
 					}
 				}
 			}
-			
-			
+
+
 		});
-		
+
 		//console.log(parseInt(this.getAttribute('stars')) || 3);
 	}
-	
+
 	static get observedAttributes() {
 		return ['stars'];
 	}
-	
+
 	initialize() {
 		if (this.getAttribute('stars')) {
 			let stars = Math.round(parseInt(this.getAttribute('stars')));
@@ -44,18 +44,19 @@ class RatingStarsClass extends HTMLElement {
 				}
         span.classList[action]('active');
         i += 1;
-			} 
+			}
 		}
 	}
-	
+
 	get template() {
 	 return `
 			<style>
 			#rating { font-size: 0; }
-			#rating span { font-size: 40px; }
+			#rating span { font-size: 30px; }
 			#rating span::before { content: "☆"; }
 			#rating span.active::before {content: "★"; }
-			#rating span:hover { cursor: pointer; }        
+			#rating span:hover { cursor: pointer; }
+      #rating { cursor: pointer; }
 			</style>
 			<div id='rating'>
 				<span></span>
@@ -63,9 +64,9 @@ class RatingStarsClass extends HTMLElement {
 				<span></span>
 				<span></span>
 				<span></span>
-			</div>                     
+			</div>
 	 `;
  }
 }
-	
+
 window.customElements.define('star-rating', RatingStarsClass);

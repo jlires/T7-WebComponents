@@ -1,157 +1,221 @@
-const info = [{title: "juego 1", img: "https://picsum.photos/500/300/?image=5",  description: "buenardo"},
-              {title: "juego 2", img: "https://picsum.photos/500/300/?image=14", description: "juego del añi"},
-              {title: "juego 3", img: "https://picsum.photos/500/300/?image=11", description: "Wenisimo hermanits"},
-              {title: "juego 4", img: "https://picsum.photos/500/300/?image=27", description: "la pulenta"},
-              {title: "juego 5", img: "https://picsum.photos/500/300/?image=13", description: "boi"},
-              {title: "juego 6", img: "https://picsum.photos/500/300/?image=9",  description: "de panini"}]
-
-
 class CardGame extends HTMLElement {
     constructor() {
         super();
+        this.title = "";
+        this.description = "";
+        this.image = "";
+        this.rating = 0;
+        this.rated = false;
+        this.tematica = "";
+        this.difficulty = "";
+        this.players = "";
+        this.min_age = "";
+        this.duration = "";
+        
     }
 
     connectedCallback() {
-        let shadowRoot = this.attachShadow({ mode: 'open' });
+      // Initialize properties that depend on light DOM
+      this.title = this.getAttribute('game-title') || this.title;
+      this.description = this.getAttribute('description') || this.description;
+      this.image = this.getAttribute('image') || this.image;
+      this.rating = this.getAttribute('rating') || this.rating;
+      this.rated = this.getAttribute('rated') || this.rated;
+      this.tematica = this.getAttribute('tematica') || this.tematica;
+      this.difficulty = this.getAttribute('difficulty') || this.difficulty;
+      this.players = this.getAttribute('players') || this.players;
+      this.min_age = this.getAttribute('min_age') || this.min_age;
+      this.duration = this.getAttribute('duration') || this.duration;
 
-        let instance = this.template;
+      // Check if shadowRoot exists first
+      if (!this.shadowRoot) {
+        this.attachShadow({mode: 'open'});
+        this.shadowRoot.innerHTML = this.template;
+      }
+      // Set the shadow attributes.
+      this.shadowRoot.querySelector('#title').innerHTML = this.title;
+      this.shadowRoot.querySelector('#gameimg').src = this.image;
+      this.shadowRoot.querySelector('#description').innerHTML = this.description;
+      this.shadowRoot.querySelector('#players').innerHTML = this.players;
+      this.shadowRoot.querySelector('#duration').innerHTML = this.duration;
+      this.shadowRoot.querySelector('#min_age').innerHTML = this.min_age;
+      this.shadowRoot.querySelector('#difficulty').innerHTML = this.difficulty;
+      this.shadowRoot.querySelector('#tematica').innerHTML = this.tematica;
+      this.shadowRoot.querySelector('.rating-stars').innerHTML = `<star-rating stars=${this.rating} rated="${this.rated}"></star_rating>`;
 
-        instance.querySelector('#title').innerHTML = game.title;
-        instance.querySelector('#gameimg').src = game.img;
-        instance.querySelector('#description').innerHTML = game.description;
-
-        shadowRoot.appendChild(instance);
     }
 
-    get template(){
+    get template() {
+
         return `
+        <div class="cardContainer">
         <div class="cardBox">
-             <content>
-                 <div class="card">
-                     <div class="front">
-                         <h3 id="title">Nombre Del Juego</h3>
-                         <img id="gameimg" src="https://picsum.photos/500/300/?image=10"></img>
-                     </div>
-                     <div class="back">
-                         <h3>Descripción</h3>
-                         <p id="description"></p>
-                     </div>
-                 </div>
-             </content>
-         </div>
-         <style>
+                   <div class="card">
+                       <div class="front">
+                       			<div class="img-container">
+                           <img id="gameimg" src="https://picsum.photos/500/300/?image=10"></img>
+                           </div>
+                           <h3 id="title"></h3>
+                       </div>
+                       <div class="back">
+                           <p id="description"></p>
+                           <table>
+                           <tbody>
+                             <tr>
+                              <td>Dificultad:</td>
+                              <td id="difficulty"></td>
+                             </tr>
+                             <tr>
+                              <td>Temática:</td>
+                              <td id="tematica"></td>
+                             </tr>
+                             <tr>
+                              <td>Jugadores:</td>
+                              <td id="players"></td>
+                             </tr>
+                             <tr>
+                              <td>Edad:</td>
+                              <td id="min_age"></td>
+                             </tr>
+                             <tr>
+                              <td>Duración:</td>
+                              <td id="duration"></td>
+                             </tr>
+                           </tbody>
+                           </table>
+                       </div>
+                   </div>
+           </div>
+           <div class="rating-stars"></div>
+           </div>
+           <style>
 
-             .cardBox {
-                 float: left;
-                 font-size: 1.2em;
-                 margin: 1% 0 0 1%;
-                 perspective: 800px;
-                 transition: all 0.3s ease 0s;
-                 width: 23.7%;
-             }
+           			.cardContainer {
+                	margin-bottom: 40px;
+                  margin-left: 40px;
+                  height: 350px;
+                  display: inline-block;
 
-             .cardBox:hover .card {
-                 transform: rotateY( 180deg);
-             }
+                }
 
-             .card {
-                 background: white;
-                 cursor: default;
-                 height: 450px;
-                 border: black solid 2px;
-                 border-radius: 50px;
-                 transform-style: preserve-3d;
-                 transition: transform 0.4s ease 0s;
-                 width: 100%;
-                 -webkit-animation: giro 1s 1;
-                 animation: giro 1s 1;
-             }
-             img {
-                 max-height: 60%;
-                 max-width: 100%;
-             }
+                .cardBox {
+                  height: 300px;
+                  perspective: 1000px;
+                  position: relative;
+                }
 
-             .card p {
-                 margin-bottom: 1.8em;
-             }
+               .cardBox:hover .card {
+                   transform: rotateY(180deg);
+               }
 
-             .card .front,
-             .card .back {
-                 backface-visibility: hidden;
-                 border-radius: 50px;
-                 box-sizing: border-box;
-                 color: black;
-                 display: block;
-                 font-size: 1.2em;
-                 height: 100%;
-                 padding: 0.8em;
-                 position: absolute;
-                 text-align: center;
-                 width: 100%;
-             }
+               .rating-stars {
+                   width: 100%;
+                   height: 50px;
+                   text-align: center;
 
-             .card .back {
-                 transform: rotateY( 180deg);
-             }
+                   border-style: solid;
+                   border-width: 0 2px 2px 2px;
+                   border-color: rgba(0,0,0,0.05);
+               }
+               .rating-stars rating {
+                   margin: 0;
+               }
 
-             .card .back a {
-                 padding: 0.3em 0.5em;
-                 color: #fff;
-                 text-decoration: none;
-                 border-radius: 1px;
-                 font-size: 0.9em;
-                 transition: all 0.2s ease 0s;
-             }
+               .card {
+                   height: 100%;
+                   width: 100%;
+                   transition: transform 0.8s;
+  								 transform-style: preserve-3d;
+                   /* box-shadow: 0 0 4px rgba(0,0,0,0.2); */
+                   border-style: solid;
+                   border-width: 2px 2px 0 2px;
+                   border-color: rgba(0,0,0,0.05);
+                   position:relative;
+                   top: -2px;
+               }
+               img {
+                   height: 100%;
+               }
 
-             .card .back a:hover {
-                 background: #fff;
-                 color: #333;
-                 text-shadow: 0 0 1px #333;
-             }
+               .img-container {
+               		 width: 100%;
+                   height: 170px;
+                   overflow: hidden;
+               }
 
-             @-webkit-keyframes giro {
-                 from {
-                     transform: rotateY( 180deg);
-                 }
-                 to {
-                     transform: rotateY( 0deg);
-                 }
-                 }
 
-                 @keyframes giro {
-                 from {
-                     transform: rotateY( 180deg);
-                 }
-                 to {
-                     transform: rotateY( 0deg);
-                 }
-             }
 
-             @media screen and (max-width: 767px) {
-                 .cardBox {
-                     margin-left: 2.8%;
-                     margin-top: 3%;
-                     width: 46%;
-                 }
-                 .card {
-                     height: 285px;
-                 }
-                 .cardBox:last-child {
-                     margin-bottom: 3%;
-                 }
-             }
+               .front, .back {
+               		 position: absolute;
+                   backface-visibility: hidden;
+                   -webkit-backface-visibility: hidden; /* Safari */
+                   height: 100%;
+                   width: 100%;
+               }
 
-             @media screen and (max-width: 480px) {
-                 .cardBox {
-                     width: 94.5%;
-                 }
-                 .card {
-                     height: 260px;
-                 }
-             }
-         </style>
+               .front p {
+                   margin-bottom: 1.8em;
+                   color: black;
+               }
+
+               .back {
+                   transform: rotateY(180deg);
+               }
+
+               .back p {
+               		padding: 0 20px 0 20px;
+                   text-align: justify;
+                   hyphens: auto;
+                   font-size: 1em;
+               }
+
+               .back table {
+               		padding: 20px;
+                  font-size: 1em;
+                  width: 100%;
+               }
+
+               .back table tr td:nth-child(2) {
+               		text-align: right;
+               }
+
+               .back table tr td:nth-child(1){
+               		text-align: left;
+                  font-weight: bold;
+               }
+
+               .front {
+               		 text-align: center;
+                   font-size: 1.2em;
+               }
+
+               .cardContainer {
+                	margin-left: 2.8%;
+                	margin-top: 3%;
+                	width: 30%;
+                	height: 285px;
+                }
+                	.cardContainer:last-child {
+                	margin-bottom: 3%;
+                }
+
+               @media screen and (max-width: 1150px) {
+                   .cardContainer {
+                       width: 46%;
+                       height: 285px;
+                   }
+               }
+
+               @media screen and (max-width: 800px) {
+                   .cardContainer {
+                       width: 100%;
+                       height: 260px;
+                       margin-left: 0;
+                   }
+               }
+           </style>
         `;
-       }
+    }
 }
 
 

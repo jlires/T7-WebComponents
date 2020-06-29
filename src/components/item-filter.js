@@ -77,6 +77,7 @@ class ItemFilter extends HTMLElement {
 
   search() {
     this.searchInput = this.searchInputElement.value;
+    this.showGames(this.games, {contains: this.searchInputElement.value});
   }
 
   getGames() {
@@ -91,21 +92,39 @@ class ItemFilter extends HTMLElement {
     })
     .then(jsonData => {
       this.games = jsonData.games;
-      this.showGames(this.games);
+      this.categories = new Set(jsonData.games.map((game) => game.tematica));
+      this.generateCategories(this.categories)
+      this.showGames(this.games, {});
     })
   }
 
-  showGames(games) {
+  generateCategories(categories) {
+  	const categoriesListElement = this.shadowRoot.querySelector(".category_filters");
+    categories.forEach(category => {
+    	const categoryElement = document.createElement("li");
+      categoryElement.innerHTML = category;
+    	categoriesListElement.appendChild(categoryElement);
+    });
+  }
+
+  showGames(games, filter) {
     const cardsRowElement = this.shadowRoot.querySelector(".row-cards");
+    WocardsRowElement.innerHTML = "";
     let cardElementsHTML = "";
+    console.log(filter.contains)
+    if (filter.contains) {
+    	games = games.filter(game => game.title.includes(filter.contains));
+    }
     games.forEach((game) => {
       cardElementsHTML = cardElementsHTML + `
-        <card-game title="${game.title}" description="${game.description}" image="${game.image}"" tematica="${game.tematica}" players="${game.players}" difficulty="${game.difficulty}"
+        <card-game game-title="${game.title}" description="${game.description}" image="${game.image}" tematica="${game.tematica}" players="${game.players}" difficulty="${game.difficulty}"
         min_age="${game.min_age}" duration="${game.duration}" rating="${game.rating}" rated="${false}" ></card-game>
       `;
     });
+
     cardsRowElement.innerHTML = cardElementsHTML;
-    
+    console.log(cardsRowElement);
+
   }
 
 
@@ -121,17 +140,7 @@ class ItemFilter extends HTMLElement {
             <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="label-icon">All</span> <span class="caret" >&nbsp;</span></button>
             <div class="dropdown-menu dropdown-menu-right" >
                <ul class="category_filters">
-                <li class="selected">All</li>
-                <li>Roll and Move</li>
-                <li>Worker Placement Games</li>
-                <li>Cooperative</li>
-                <li>Deck Building</li>
-                <li>Area Control</li>
-                <li>Secret Identity</li>
-                <li>Legacy Games</li>
-                <li>Party Games</li>
-                <li>Puzzles</li>
-                <li>Combat Games</li>
+                <li class="selected">Todos</li>
                </ul>
             </div>
             <button id="searchBtn" type="button" class="btn btn-secondary btn-search" ><span class="glyphicon glyphicon-search" >&nbsp;</span> <span class="label-icon" >Search</span></button>
@@ -139,7 +148,7 @@ class ItemFilter extends HTMLElement {
           </div>
          </div>
       </div>
-      <div class="row row-cards">
+      <div class="row-cards">
       </div>
     </div>
     <style>
