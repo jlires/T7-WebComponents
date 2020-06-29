@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 //                              Templates                                     //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -14,7 +14,10 @@ class ItemFilter extends HTMLElement {
     this._categorySelected = "All";
     this._searchInput = "";
     this.show = false;
+    this.games = [];
+  }
 
+  connectedCallback() {
     this.attachShadow({mode: 'open'});
 
     this.shadowRoot.innerHTML = this.template;
@@ -34,6 +37,8 @@ class ItemFilter extends HTMLElement {
     this.searchButtonElement.addEventListener("click", () => this.search());
 
     this.searchInputElement = this.shadowRoot.querySelector("#table_filter");
+
+    this.getGames();
   }
 
   get categorySelected(){
@@ -74,6 +79,35 @@ class ItemFilter extends HTMLElement {
     this.searchInput = this.searchInputElement.value;
   }
 
+  getGames() {
+    fetch("https://peaceful-stream-32007.herokuapp.com/games")
+    .then(response => {
+      if (response.status !== 200) {
+        console.log("Error: ", response.status);
+      }
+      else {
+        return response.json();
+      }
+    })
+    .then(jsonData => {
+      this.games = jsonData.games;
+      this.showGames(this.games);
+    })
+  }
+
+  showGames(games) {
+    const cardsRowElement = this.shadowRoot.querySelector(".row-cards");
+    let cardElementsHTML = "";
+    games.forEach((game) => {
+      cardElementsHTML = cardElementsHTML + `
+        <card-game title="${game.title}" description="${game.description}" image="${game.image}"" tematica="${game.tematica}" players="${game.players}" difficulty="${game.difficulty}"
+        min_age="${game.min_age}" duration="${game.duration}" rating="${game.rating}" rated="${false}" ></card-game>
+      `;
+    });
+    cardsRowElement.innerHTML = cardElementsHTML;
+    
+  }
+
 
   get template() {
     return `
@@ -105,7 +139,9 @@ class ItemFilter extends HTMLElement {
           </div>
          </div>
       </div>
+      <div class="row row-cards">
       </div>
+    </div>
     <style>
     .searchFilter {
       margin-bottom: 20px;
