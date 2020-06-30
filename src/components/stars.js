@@ -43,7 +43,7 @@ class RatingStarsClass extends HTMLElement {
 		if (!this.rated) {
 			let rating = parseInt(target.getAttribute('rating'));
 
-			fetch("http://127.0.0.1:3000/rate", {
+			fetch("https://peaceful-stream-32007.herokuapp.com/rate", {
         method: 'POST',
 				body: JSON.stringify({
 					user: window.website.user,
