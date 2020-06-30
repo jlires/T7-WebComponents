@@ -1,4 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
+  //*                               Global                                   *//
+////////////////////////////////////////////////////////////////////////////////
+window.website = new Object;
+
+window.website.user = "";
+
+
+////////////////////////////////////////////////////////////////////////////////
 //*                             DOM elements                                 *//
 ////////////////////////////////////////////////////////////////////////////////
 const contentBlock = document.getElementById('content-block');
@@ -39,6 +47,7 @@ const signWithGoogle = () =>{
     auth.signInWithRedirect(googleProvider)
     .then(function() {
         console.log("- - - Loggeado - - - - ");
+        window.website.user = auth.currentUser.displayName;
     })
     .catch(function(e) {
         console.log(e);
@@ -47,7 +56,7 @@ const signWithGoogle = () =>{
 
 const signOutWithGoogle = () =>{
     auth.signOut().then(function() {
-        name = '';
+        window.website.user = "";
         // Sign-out successful.
       }).catch(function(error) {
         // An error happened.
@@ -76,62 +85,9 @@ auth.onAuthStateChanged((user) => {
     verification();
     if (user) {
       console.log("Usuario  Loggeado!");
+      window.website.user = auth.currentUser.displayName;
     } else {
       console.log("No hay nadie loggeado!");
+      window.website.user = "";
     }
 });
-
-////////////////////////////////////////////////////////////////////////////////
-//*                    Firebase Firestore configuration                      *//
-////////////////////////////////////////////////////////////////////////////////
-
-const db = firebase.firestore();
-const settings = { timestampsInSnapshots: true };
-db.settings(settings);
-
-firebase.firestore()
-.enablePersistence()
-.catch(function(err) {
-    if (err.code == 'failed-precondition') {
-        // Multiple tabs open, persistence can only be enabled
-        // in one tab at a a time.
-        // ...
-        console.log("failed-precondition");
-    } else if (err.code == 'unimplemented') {
-        // The current browser does not support all of the
-        // features required to enable persistence
-        // ...
-        console.log("unimplemented");
-    }
-});
-
-////////////////////////////////////////////////////////////////////////////////
-//*                              Get Games                                   *//
-////////////////////////////////////////////////////////////////////////////////
-
-const storage = firebase.storage();
-const storageRef = storage.ref();
-
-db.collection("games")
-.orderBy('date', 'asc')
-.onSnapshot(function(snapshot) {
-    snapshot.docChanges().forEach(function(change) {
-        if (change.type === "added") {
-            console.log("Added post: ", change.doc.data());
-            createChildren(change.doc.data());
-        }
-        if (change.type === "modified") {
-            console.log("Modified post: ", change.doc.data());
-            createChildren(change.doc.data());
-        }
-        if (change.type === "removed") {
-            console.log("Removed post: ", change.doc.data());
-        }
-    });
-});
-
-const addGame = (data) => {
-    if (data) {
-        ///
-    };
-};
