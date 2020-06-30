@@ -48,6 +48,7 @@ const signWithGoogle = () =>{
     .then(function() {
         console.log("- - - Loggeado - - - - ");
         window.website.user = auth.currentUser.displayName;
+        contentBlock.innerHTML = "<item-filter></item-filter>";
     })
     .catch(function(e) {
         console.log(e);
@@ -77,6 +78,7 @@ const verification = () => {
         console.log("Usuario actual: ", auth.currentUser.displayName);
         loginBlock.style.display = 'none';
         contentBlock.style.display = 'block';
+        contentBlock.innerHTML = "<item-filter></item-filter>";
     }
 };
 

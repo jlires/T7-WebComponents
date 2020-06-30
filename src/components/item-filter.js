@@ -1,8 +1,8 @@
 class ItemFilter extends HTMLElement {
   constructor() {
     super();
-    this._categoryButtonTitle = "All";
-    this._categorySelected = "All";
+    this._categoryButtonTitle = "Todos";
+    this._categorySelected = "Todos";
     this._searchInput = "";
     this.show = false;
     this.games = [];
@@ -107,15 +107,16 @@ class ItemFilter extends HTMLElement {
     	games = games.filter(game => game.title.includes(filter.contains));
     }
     games.forEach((game) => {
+      const didUserRateIt = game.raters.includes(window.website.user);
+      const rating = didUserRateIt ? game.raters_values[window.website.user] : game.rating;
       cardElementsHTML = cardElementsHTML + `
         <card-game game-title="${game.title}" description="${game.description}" image="${game.image}" tematica="${game.tematica}" players="${game.players}" difficulty="${game.difficulty}"
-        min_age="${game.min_age}" duration="${game.duration}" rating="${game.rating}" rated="${false}" ></card-game>
+        min_age="${game.min_age}" duration="${game.duration}" rating="${rating}" rated="${didUserRateIt}" ></card-game>
       `;
     });
 
     cardsRowElement.innerHTML = cardElementsHTML;
   }
-
 
   get template() {
     return `

@@ -1,32 +1,22 @@
 class RatingStarsClass extends HTMLElement {
 	constructor() {
 		super();
+		this.game_title = this.getAttribute('game-title');
 		this.attachShadow({mode:'open'});
 		this.shadowRoot.innerHTML = this.template;
 		this.rated = this.getAttribute('rated') === "true" ? true : false;
 
 		this.stars = this.shadowRoot.querySelector('#rating');
 		this.initialize();
-		this.stars.addEventListener('click', function (e) {
-			if (!this.rated) {
-				this.rated = true;
-				let action = 'add';
-				let i = 0;
-				let value = 1;
-				for (const span of this.children) {
-					span.classList[action]('active');
-					i += value;
-					if (span === e.target) {
-						action = 'remove';
-						value = 0;
-					}
-				}
-			}
-
-
+		this.stars.querySelectorAll('span').forEach(star => {
+			star.addEventListener('click', (e) => this.rate(e.target));
+		});
+		this.stars.addEventListener('mouseleave', (e) => this.reset());
+		this.stars.querySelectorAll('span').forEach(star => {
+			star.addEventListener('mouseover', (e) => this.hover(e.target));
 		});
 
-		//console.log(parseInt(this.getAttribute('stars')) || 3);
+		this.rating = this.getAttribute('stars');
 	}
 
 	static get observedAttributes() {
@@ -34,17 +24,88 @@ class RatingStarsClass extends HTMLElement {
 	}
 
 	initialize() {
-		if (this.getAttribute('stars')) {
-			let stars = Math.round(parseInt(this.getAttribute('stars')));
-			let action = 'add';
-			let i = 0;
-			for (const span of this.stars.children) {
-				if (i === stars) {
-					action = 'remove';
-				}
-        span.classList[action]('active');
-        i += 1;
+		this.rating = this.getAttribute('stars');
+		let stars = this.stars.querySelectorAll('span');
+		stars.forEach(star => {
+			if (star.getAttribute('rating') <= this.rating) {
+				star.classList['add']('active');
 			}
+			else {
+				star.classList['remove']('active');
+			}
+			if (this.rated) {
+				star.classList['add']('rated');
+			}
+		})
+	}
+
+	rate(target) {
+		if (!this.rated) {
+			let rating = parseInt(target.getAttribute('rating'));
+
+			fetch("https://peaceful-stream-32007.herokuapp.com/rate", {
+        method: 'POST', // or 'PUT'
+				body: {
+					user: window.website.user,
+					rating: rating,
+					title: this.game_title
+				},
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+	    .then(response => {
+	      if (response.status !== 200) {
+	        console.log("Error: ", response.status);
+	      }
+	      else {
+					this.rated = true;
+					this.rating = rating;
+
+					let stars = this.stars.querySelectorAll('span');
+					stars.forEach(star => {
+						if (star.getAttribute('rating') <= rating) {
+							star.classList['add']('active');
+							star.classList['add']('rated');
+						}
+						else star.classList['remove']('active');
+					})
+	      }
+	    })
+		}
+	}
+
+	hover(target) {
+		if (!this.rated) {
+			let rating = parseInt(target.getAttribute('rating'));
+
+			let stars = this.stars.querySelectorAll('span');
+			stars.forEach(star => {
+				if (star.getAttribute('rating') <= rating) {
+					star.classList['add']('active');
+					star.classList['add']('rated');
+				}
+				else {
+					star.classList['remove']('active');
+					star.classList['remove']('rated');
+				}
+			})
+		}
+	}
+
+	reset() {
+		if (!this.rated) {
+			let stars = this.stars.querySelectorAll('span');
+			stars.forEach(star => {
+				if (star.getAttribute('rating') <= this.rating) {
+					star.classList['add']('active');
+					star.classList['remove']('rated');
+				}
+				else {
+					star.classList['remove']('active');
+					star.classList['remove']('rated');
+				}
+			})
 		}
 	}
 
@@ -57,13 +118,15 @@ class RatingStarsClass extends HTMLElement {
 			#rating span.active::before {content: "★"; }
 			#rating span:hover { cursor: pointer; }
       #rating { cursor: pointer; }
+			#rating span { color: #FBE551; }
+			#rating .rated { color: #F6BB0A; }
 			</style>
 			<div id='rating'>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
+				<span rating='1'></span>
+				<span rating='2'></span>
+				<span rating='3'></span>
+				<span rating='4'></span>
+				<span rating='5'></span>
 			</div>
 	 `;
  }

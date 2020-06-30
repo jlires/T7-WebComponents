@@ -11,7 +11,7 @@ class CardGame extends HTMLElement {
         this.players = "";
         this.min_age = "";
         this.duration = "";
-        
+
     }
 
     connectedCallback() {
@@ -41,7 +41,10 @@ class CardGame extends HTMLElement {
       this.shadowRoot.querySelector('#min_age').innerHTML = this.min_age;
       this.shadowRoot.querySelector('#difficulty').innerHTML = this.difficulty;
       this.shadowRoot.querySelector('#tematica').innerHTML = this.tematica;
-      this.shadowRoot.querySelector('.rating-stars').innerHTML = `<star-rating stars=${this.rating} rated="${this.rated}"></star_rating>`;
+      this.shadowRoot.querySelector('.rating-stars').innerHTML = `
+        <star-rating stars=${this.rating} rated="${this.rated}" game-title="${this.title}">
+        </star-rating>
+      `;
 
     }
 
