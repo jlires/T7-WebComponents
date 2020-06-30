@@ -10,8 +10,8 @@
 class ItemFilter extends HTMLElement {
   constructor() {
     super();
-    this._categoryButtonTitle = "All";
-    this._categorySelected = "All";
+    this._categoryButtonTitle = "Todos";
+    this._categorySelected = "Todos";
     this._searchInput = "";
     this.show = false;
     this.games = [];
@@ -27,11 +27,6 @@ class ItemFilter extends HTMLElement {
 
     this.categoryDropdownElement = this.shadowRoot.querySelector(".dropdown-menu");
     this.categoryDropdownElement.style.display = "none";
-
-    this.categorySelectElements = this.shadowRoot.querySelectorAll(".dropdown-menu li");
-    this.categorySelectElements.forEach(el => {
-      el.addEventListener("click", (event) => this.changeCategory(event.target))
-    });
 
     this.searchButtonElement = this.shadowRoot.querySelector("#searchBtn");
     this.searchButtonElement.addEventListener("click", () => this.search());
@@ -77,7 +72,10 @@ class ItemFilter extends HTMLElement {
 
   search() {
     this.searchInput = this.searchInputElement.value;
-    this.showGames(this.games, {contains: this.searchInputElement.value});
+    this.showGames(this.games, {
+			contains: this.searchInputElement.value,
+			type: this.categorySelected,
+		});
   }
 
   getGames() {
@@ -95,15 +93,24 @@ class ItemFilter extends HTMLElement {
       this.categories = new Set(jsonData.games.map((game) => game.tematica));
       this.generateCategories(this.categories)
       this.showGames(this.games, {});
-    })
+		})
+		.then(() => {
+			this.categorySelectElements = this.shadowRoot.querySelectorAll(".dropdown-menu li");
+			console.log(this.categorySelectElements);
+			this.categorySelectElements.forEach(el => {
+				el.addEventListener("click", (event) => {
+					this.changeCategory(event.target);
+				})
+			});
+		})
   }
 
   generateCategories(categories) {
   	const categoriesListElement = this.shadowRoot.querySelector(".category_filters");
     categories.forEach(category => {
-    	const categoryElement = document.createElement("li");
+			const categoryElement = document.createElement("li");
       categoryElement.innerHTML = category;
-    	categoriesListElement.appendChild(categoryElement);
+			categoriesListElement.appendChild(categoryElement);
     });
   }
 
@@ -114,7 +121,14 @@ class ItemFilter extends HTMLElement {
 
     if (filter.contains) {
     	games = games.filter(game => game.title.includes(filter.contains));
-    }
+		}
+		
+		if (filter.type && filter.type !== "Todos") {
+			games = games.filter(game => {
+				return game.tematica.slice(0, 10) === filter.type
+			});
+		}
+
     games.forEach((game) => {
       cardElementsHTML = cardElementsHTML + `
         <card-game game-title="${game.title}" description="${game.description}" image="${game.image}" tematica="${game.tematica}" players="${game.players}" difficulty="${game.difficulty}"
@@ -135,7 +149,7 @@ class ItemFilter extends HTMLElement {
           <div class="input-group" >
            <input id="table_filter" type="text" class="form-control" aria-label="Text input with segmented button dropdown" >
            <div class="input-group-btn" >
-            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="label-icon">All</span> <span class="caret" >&nbsp;</span></button>
+            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="label-icon">Todos</span> <span class="caret" >&nbsp;</span></button>
             <div class="dropdown-menu dropdown-menu-right" >
                <ul class="category_filters">
                 <li class="selected">Todos</li>
